@@ -1,0 +1,19 @@
+{
+    "options": {
+      "threshold": 0,
+      "persistResult":"true",
+      "datasource": {
+        "database": "ghtorrent",
+        "user": "root",
+        "password": "",
+        "host": "localhost"
+      },
+      "today": "2020-09-03",
+      "timeout": "1H",
+      "minimumDurationInMonths": "1",
+      "tokens":{
+        "user_name":"token"
+      }
+    }
+  }
+  

@@ -1,0 +1,8 @@
+mysql-connector-python
+networkx
+APScheduler
+pandas
+python-dateutil
+requests
+arrow
+

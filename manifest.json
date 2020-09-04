@@ -1,0 +1,149 @@
+{
+  "attributes": [
+    {
+      "name": "community",
+      "initial": "c",
+      "weight": 20,
+      "enabled": true,
+      "requires_source": false,
+      "options": {
+        "threshold": 2,
+        "cutoff": 0.8
+      }
+    },
+    {
+      "name": "continuous_integration",
+      "initial": "i",
+      "weight": 5,
+      "enabled": true,
+      "requires_source": true,
+      "options": {
+      }
+    },
+    {
+      "name": "documentation",
+      "initial": "d",
+      "weight": 10,
+      "enabled": true,
+      "requires_source": true,
+      "options": {
+          "threshold": 0.001866 
+      }
+    },
+    {
+      "name": "pull_requests",
+      "initial": "e",
+      "weight": 5,
+      "enabled": true,
+      "requires_source": false,
+      "options": {
+        "threshold": 0
+      }
+    },
+    {
+      "name": "history",
+      "initial": "h",
+      "weight": 20,
+      "enabled": true,
+      "requires_source": false,
+      "options": {
+        "threshold": 1,
+        "minimumDurationInMonths": 1
+      }
+    },
+    {
+      "name": "license",
+      "initial": "l",
+      "weight": 10,
+      "enabled": true,
+      "requires_source": true,
+      "essential": true
+    },
+    {
+      "name": "management",
+      "initial": "m",
+      "weight": 5,
+      "enabled": true,
+      "requires_source": false,
+      "options": {
+          "threshold": 0.022989
+      }
+    },
+    {
+      "name": "dependency",
+      "initial": "o",
+      "weight": 10,
+      "enabled": true,
+      "requires_source": false,
+      "options": {
+        "threshold": 0
+      }
+    },
+    {
+      "name": "releases",
+      "initial": "o",
+      "weight": 5,
+      "enabled": true,
+      "requires_source": false,
+      "options": {
+        "threshold": 0
+      }
+    },
+    {
+      "name": "project_size",
+      "initial": "p",
+      "weight": 0,
+      "enabled": true,
+      "requires_source": true,
+      "options": {
+        "threshold": 0
+      }
+    },
+    {
+      "name": "repository_size",
+      "initial": "r",
+      "weight": 0,
+      "enabled": true,
+      "requires_source": true,
+      "options": {
+        "threshold": 0,
+        "timeout": "6M"
+      }
+    },
+    {
+      "name": "state",
+      "initial": "s",
+      "weight": 0,
+      "enabled": true,
+      "requires_source": false,
+      "options": {
+        "threshold": "6m",
+        "timeout": "6M"
+      }
+    },
+    {
+      "name": "stars",
+      "initial": "t",
+      "weight": 0,
+      "enabled": true,
+      "requires_source": false,
+      "options": {
+        "threshold": 0,
+        "timeout": "6M"
+      }
+    },
+    {
+      "name": "unit_test",
+      "initial": "u",
+      "weight": 10,
+      "enabled": true,
+      "requires_source": true,
+      "dependencies": [
+        "cloc"
+      ],
+      "options": {
+        "threshold": 0.001016
+      }
+    }
+  ]
+}
