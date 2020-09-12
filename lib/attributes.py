@@ -7,13 +7,9 @@ import sys
 import types
 import traceback
 from datetime import datetime
-import urllib.request
 from time import strptime
-from datetime import datetime
 import attributes
-import requests
 from lib import utilities
-import mysql.connector
 
 class Attribute(object):
     def __init__(self, attribute, **goptions):
@@ -217,22 +213,22 @@ class Attributes(object):
             except:
                 print('')
             token_avail = False
-            for uname in self.tokens:
+            for token in self.tokens:
                 if(token_avail == True):
                     break 
                 else:
                     try:
-                        last_commit_date = requests.get(get_url,auth=(uname,self.tokens[uname])).json()[0]["commit"]["committer"]["date"].split("T")[0]
+                        last_commit_date = utilities.url_to_json(get_url,[self.tokens[token],token])[0]["commit"]["committer"]["date"].split("T")[0]
                         token_avail = True
                     except:
                         continue
             if(token_avail == False):
                 try:
                     print("[Reg: Last_Commit_Date]Couldn't fetch data from API! Trying out without token..")
-                    last_commit_date = requests.get(get_url).json()[0]["commit"]["committer"]["date"].split("T")[0]
+                    last_commit_date = utilities.url_to_json(get_url)[0]["commit"]["committer"]["date"].split("T")[0]
                     print('Fetch Successful')
-                except:
-                    print('Failed to fetch last commit date')
+                except Exception as ex:
+                    print(ex)
                     last_commit_date = None
             if last_commit_date is None:
                 last_commit_date = self.today

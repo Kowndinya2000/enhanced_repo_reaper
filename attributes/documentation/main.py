@@ -37,7 +37,6 @@ def run(project_id, repo_path, cursor, **options):
 
     attr_threshold = options['threshold']
     attr_pass = (ratio >= attr_threshold)
-    #print(repo_path)
     print('Documentation: ',ratio)
     return (attr_pass, ratio)
 

@@ -8,14 +8,15 @@ MAP = {
     'Objective C': ['Objective C', 'C/C++ Header']
 }
 
-
+QUERY = '''
+SELECT language FROM projects WHERE id = {0}
+'''
+ 
 def run(project_id, repo_path, cursor, **options):
     print("----- METRIC: REPOSITORY SIZE -----")
     threshold = options.get('threshold', 0)
 
-    query = 'SELECT language FROM projects WHERE id = %d' % project_id
-    cursor.execute(query)
-
+    cursor.execute(QUERY.format(project_id))
     record = cursor.fetchone()
     language = record[0]
     languages = MAP[language] if language in MAP else [language]

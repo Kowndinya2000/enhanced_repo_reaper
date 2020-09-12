@@ -1,34 +1,34 @@
 import sys
 import requests
-from lib import utilities
+from lib.utilities import url_to_json
 
-
+QUERY = '''
+SELECT url FROM projects WHERE id = {0}
+'''
 def run(project_id, repo_path, cursor, **options):
     print("----- METRIC: STARS -----")
     threshold = options.get('threshold', 0)
-    cursor.execute('SELECT url FROM projects WHERE id = {}'.format(project_id))
-    record = cursor.fetchone()
-    full_url = record[0]
+    cursor.execute(QUERY.format(project_id))
+    full_url = cursor.fetchone()[0]
     git_tokens = options['tokens']
     token_avail = False
-    for user_name in git_tokens:
-        if(token_avail == True):
+    # Making a github api request with the tokens provided 
+    for token in git_tokens:
+        try: 
+            rresult = url_to_json(full_url,authentication=[git_tokens[token],token])["stargazers_count"]
+            token_avail = True
             break
-        else:
-            try: 
-                page = requests.get(full_url,auth=(user_name,git_tokens[user_name])).json()["stargazers_count"]
-                token_avail = True
-            except:
-                continue
+        except:
+            continue
+    # Making api request without token, in the case all OAuth tokens got expired or incorrect tokens provided  
     if(token_avail == False):
         try:
-            print("[Reg: Stargazers Count]Tokens didn't work! Trying out without token...")
-            page = requests.get(full_url).json()["stargazers_count"]
+            print('without token - stargazers - fetch ok')
+            rresult = url_to_json(full_url)["stargazers_count"]
             print('Fetch Successful')
-        except:
-            print("[Reg: Stargazers Count]Couldn't fetch data..")
-            page = None
-    rresult = page
+        except Exception as ex:
+            print(ex)
+            rresult = None
     bresult = True if rresult is not None and rresult >= threshold else False
     print('stars: ',rresult)
     return bresult, rresult

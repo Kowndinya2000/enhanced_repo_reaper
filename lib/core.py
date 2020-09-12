@@ -12,7 +12,7 @@ class Tokenizer():
         tokens_pairs = config.get('options', {}).get('tokens', [])
         tokens = []
         for x in tokens_pairs:
-            tokens.append(tokens_pairs[x])
+            tokens.append(x)
         self.have_tokens = bool(tokens)
         self.available_tokens = queue.Queue()
         self.scheduler = apscheduler.schedulers.background.BackgroundScheduler(

@@ -1,37 +1,24 @@
 import sys
 from datetime import datetime
-import urllib.request
 from time import strptime
-import attributes
-import requests
 from lib import utilities
 import os
 import os as inner_os
-import mysql.connector
 from lib import dateutil
-QUERY = '''
-SELECT name FROM projects WHERE id={0}
-'''
-def getLastCommitDate(project_id,cursor):   
-    cursor.execute(QUERY.format(project_id))
-    repoName = cursor.fetchone()[0]
-    os.chdir("path/"+str(project_id)+"/")
-    stri = os.getcwd() 
-    page = ""
-    for repos in os.listdir():
-        if(repos == repoName):
-            os.chdir(repos)
-            stream = inner_os.popen('git log --pretty=format:%cd').read().split("\n")
-            dat = stream[0].split(" ")
-            page += dat[4] + "-" + str(strptime(dat[1],'%b').tm_mon) + "-" + dat[2]     
-            break
+
+def get_last_commit_date(repo_path):   
+    os.chdir(repo_path)
+    stream = inner_os.popen('git log --pretty=format:%cd').read().split("\n")
+    dat = stream[0].split(" ")
+    page = dat[4] + "-" + str(strptime(dat[1],'%b').tm_mon) + "-" + dat[2]     
     return page
 
 def run(project_id, repo_path, cursor, **options):
     print("----- METRIC: STATE -----")
     bresult = False
     rresult = 'dormant'
-    last_commit_date = getLastCommitDate(project_id,cursor)
+    # Obtaining last commit date 
+    last_commit_date = get_last_commit_date(repo_path)
     if last_commit_date is not None:
         today = options.get('today', datetime.today().date())
         if isinstance(today, str):

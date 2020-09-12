@@ -1,38 +1,29 @@
-import collections
 import sys
 import os
-import os as inner_os
-from lib.core import Tokenizer
-from lib.utilities import url_to_json
 from subprocess import Popen, PIPE
-
-QUERY = '''
-SELECT name FROM projects WHERE id={0}
-'''
 
 def run(project_id, repo_path, cursor, **options):
     print("----- METRIC: COMMUNITY -----")
     num_core_contributors = 0
     num_commits = 0
-    commitList = []
-    cursor.execute(QUERY.format(project_id))
-    repoName = cursor.fetchone()[0]
-    os.chdir("path/"+str(project_id)+"/")
-    stri = os.getcwd()
-    for repos in os.listdir():
-        if(repos == repoName):
-            os.chdir(repos)
-            stream = inner_os.popen(r'git log --pretty="%ae" | sort').read().split()
-            unique_names = set(stream)
-            for names in unique_names:
-                stream.count(names)
-                commitList.append(int(stream.count(names)))
-                num_commits += int(stream.count(names))
-            break
-    commitList.sort(reverse=True)
+    commit_list = []
+
+    # Collecting author email for every commit via git-shell command
+    os.chdir(repo_path)
+    with Popen(r'git log --pretty="%ae" | sort',shell=True,
+            stdout=PIPE, stderr=PIPE) as p:
+            output, errors = p.communicate()
+    stream = output.decode('utf-8-sig',errors='ignore').splitlines()
+    authors = set(stream)
+    for names in authors:
+        stream.count(names)
+        commit_list.append(int(stream.count(names)))
+        num_commits += int(stream.count(names))
+    commit_list.sort(reverse=True) # commit_list contains the commits made by individual authors sorted in descending order
+    
     cutoff = 0.8
     aggregate = 0
-    for v in commitList:
+    for v in commit_list:
         num_core_contributors += 1
         aggregate += v
         if (aggregate / num_commits) >= cutoff:

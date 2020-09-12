@@ -35,18 +35,21 @@ def run(project_id, repo_path, cursor, **options):
     record = cursor.fetchone()
     full_url = record[0]    
     token_avail = False
-    for user_name in git_tokens:
+
+    # Making a github api request with the tokens provided 
+    for token in git_tokens:
         if(token_avail == True):
             break
         else:
             try:
                 json_response = url_to_json(full_url, headers={
                         'Accept': 'application/vnd.github.drax-preview+json'
-                    }, authentication=[user_name,git_tokens[user_name]]
+                    }, authentication=[git_tokens[token],token]
                 )
                 token_avail = True
             except:
                 continue
+    # Making api request without token, in the case all OAuth tokens got expired or incorrect tokens provided  
     if(token_avail == False):
         try:
             print("[Reg: License]Tokens didn't work! Trying out without token...")
@@ -55,8 +58,9 @@ def run(project_id, repo_path, cursor, **options):
                         }, authentication=[]
                     ) 
             print('Fetch Successful')
-        except:
-            print("[Reg: License]Couldn't fetch data from API! Trying out search for patterns in the license files..")
+        except Exception as ex:
+            print(ex)
+            json_response = None
     result = True if 'license' in json_response \
         and json_response['license'] else False
     if not result:

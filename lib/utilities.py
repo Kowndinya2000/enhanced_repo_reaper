@@ -10,6 +10,7 @@ import tarfile
 from tempfile import NamedTemporaryFile
 import requests
 from lib import dateutil
+from bs4 import BeautifulSoup
 
 # GitHub OAuth token issuer
 TOKENIZER = None
@@ -226,6 +227,16 @@ def url_to_json(url, headers={},authentication=[]):
         result = requests.get(url,headers=headers).json()
     return result
 
+def url_to_dom_value(url,authentication=[],element=""):
+    if(len(authentication) == 2):
+        page = requests.get(url,auth=(authentication[0],authentication[1]))
+        dom = BeautifulSoup(page.content,'lxml')
+        result = int(dom.body.find_all('a',class_='btn-link selected')[0].text.replace("\n","").split(element)[0])
+    elif(len(authentication) == 0):
+        page = requests.get(url)
+        dom = BeautifulSoup(page.content,'lxml')
+        result = int(dom.body.find_all('a',class_='btn-link selected')[0].text.replace("\n","").split(element)[0])
+    return result
 
 def get_repo_path(repo_id, repositories_dir):
     # Repository path is the subdir within the id folder whose name is

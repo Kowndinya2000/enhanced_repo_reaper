@@ -11,8 +11,9 @@
       "today": "2020-09-03",
       "timeout": "1H",
       "minimumDurationInMonths": "1",
-      "tokens":{
-        "user_name":"token"
+      "tokens": {
+        "xxxxx21442f5275b5f4b0f72de71371bd4axxxxx":"vidya-mi",
+        "xxxxx4f95ed4dd52b48d479c8df183e4acbxxxxx":"Kowndinya2000"
       }
     }
   }
